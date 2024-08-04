@@ -7,9 +7,11 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginManager;
+import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import io.github._4drian3d.signedvelocity.velocity.listener.Listener;
+import io.github._4drian3d.signedvelocity.velocity.listener.PluginMessageListener;
 import io.github._4drian3d.signedvelocity.velocity.packet.PacketAdapter;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
@@ -37,6 +39,8 @@ public final class SignedVelocity {
   private Metrics.Factory factory;
   @Inject
   private PluginManager pluginManager;
+  @Inject
+  private ProxyServer proxyServer;
 
   @Subscribe
   public void onProxyInitialization(final ProxyInitializeEvent event) {
@@ -46,5 +50,6 @@ public final class SignedVelocity {
 
     Listener.register(injector);
     PacketAdapter.register(injector, pluginManager);
+    proxyServer.getEventManager().register(this, new PluginMessageListener());
   }
 }
